@@ -1,0 +1,17 @@
+*.log
+logs/
+backend.log
+
+
+frontend/node_modules/
+
+
+backend/target/
+*.jar
+*.class
+
+
+frontend/package-lock.json
+
+
+.railway

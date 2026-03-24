@@ -1,0 +1,86 @@
+# Common Configuration
+server:
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-stacktrace: never
+
+spring:
+  main:
+    allow-circular-references: true
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
+  expiration: 86400000
+
+# Logging
+logging:
+  level:
+    com.busybrains.assignment: INFO
+    org.springframework.security: INFO
+
+---
+
+# Local Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/busybrains_assignment?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: assignment
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 233534266175-aqvirmv36vur0m0q0uj2gu6b23p9rvjr.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile,email
+            redirect-uri: http://localhost:8080/api/login/oauth2/code/google
+
+server:
+  port: 8080
+
+frontend:
+  url: http://localhost:3000
+
+---
+
+# Production Profile (Railway)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: profile,email
+            redirect-uri: ${PRODUCTION_URL}/api/login/oauth2/code/google
+
+server:
+  port: ${PORT:8080}
+
+frontend:
+  url: ${FRONTEND_URL}
